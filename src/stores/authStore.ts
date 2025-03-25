@@ -19,7 +19,7 @@ interface AuthState {
 const useAuthStore = create<AuthState>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         setLoginSuccess: (tokens) => {
           set({ token: tokens.token, refreshToken: tokens.refreshToken });
         },
@@ -41,3 +41,5 @@ const useAuthStore = create<AuthState>()(
     )
   )
 );
+
+export default useAuthStore;

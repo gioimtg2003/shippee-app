@@ -8,4 +8,7 @@
   "plugins": [
     "eslint-plugin-next-on-pages"
   ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 }
