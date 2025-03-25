@@ -1,0 +1,30 @@
+name: CI to Verify
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v4
+      - name: Use Node.js from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      #   - name: Unit Test
+      #     run: pnpm test
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm run build
