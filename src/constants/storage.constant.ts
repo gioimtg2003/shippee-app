@@ -1,3 +1,5 @@
 export const STORAGE_STORE = {
-  AUTH: 'auth_store',
+  AUTH_STORE: 'AUTH_STORE',
+  PERMISSION: 'PERMISSION',
+  SUBSCRIBED: 'SUBSCRIBED',
 };
