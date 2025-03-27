@@ -1,4 +1,4 @@
-const isInStandaloneMode = () =>
+export const isInStandaloneMode = () =>
   window.matchMedia('(display-mode: standalone)').matches ||
   document.referrer.includes('android-app://');
 
@@ -9,13 +9,12 @@ export const getLocation = (
   onTimeOut: () => void
 ) => {
   if (navigator.geolocation) {
-    onInit && onInit();
+    onInit();
     navigator.geolocation.getCurrentPosition(onSuccess, onFail);
 
-    onTimeOut &&
-      setTimeout(() => {
-        onTimeOut();
-      }, 500);
+    setTimeout(() => {
+      onTimeOut();
+    }, 500);
   } else {
     alert("This device doesn't support location!");
   }

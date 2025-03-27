@@ -48,7 +48,7 @@ export function createAxiosClient({
 
         const currentUnix = dayjs().unix();
 
-        var { exp } = token
+        const { exp } = token
           ? (jwtDecode(token) as JwtPayload)
           : { exp: undefined };
         if (!!exp && currentUnix >= exp - 1000 && refreshToken) {
@@ -119,7 +119,7 @@ export function createAxiosClient({
       console.log('error---', error);
 
       const currentUnix = dayjs().unix();
-      var { exp } = token
+      const { exp } = token
         ? (jwtDecode(token) as JwtPayload)
         : { exp: undefined };
 
