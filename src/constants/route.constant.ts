@@ -6,10 +6,11 @@ export const RoutesMap = {
     VERIFY_ACCOUNT: '/verify',
   },
   APP: {
-    PLACE_ORDER: '/',
+    PLACE_ORDER: '/app',
     ORDER_HISTORY: '/order-history',
-    SETTINGS: '/settings',
-    USERS: '/users',
-    USER_DETAIL: '/users/:id',
+    DRIVERS: '/drivers',
+  },
+  SETTING: {
+    PROFILE: '/setting/profile',
   },
 };

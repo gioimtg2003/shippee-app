@@ -28,7 +28,7 @@ const pacifico = Pacifico({
 });
 
 export const metadata: Metadata = {
-  title: 'Shippee App',
+  title: 'Shippee',
   description: 'Delivery service for everyone',
 };
 

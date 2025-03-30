@@ -1,5 +1,9 @@
 {
   "SignIn": "Đăng nhập",
   "installPrompt": "Cài đặt ứng dụng này trên thiết bị của bạn",
-  "download": "Tải xuống"
+  "download": "Tải xuống",
+  "PLACE_ORDER": "Đặt hàng",
+  "ORDER_HISTORY": "Lịch sử đặt hàng",
+  "DRIVERS": "Tài xế",
+  "setting": "Cài đặt"
 }

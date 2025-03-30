@@ -1,5 +1,9 @@
 {
   "SignIn": "Sign in",
   "installPrompt": "Install this app on your device",
-  "download": "Download"
+  "download": "Download",
+  "PLACE_ORDER": "Place Order",
+  "ORDER_HISTORY": "Order History",
+  "DRIVERS": "Drivers",
+  "setting": "Setting"
 }
