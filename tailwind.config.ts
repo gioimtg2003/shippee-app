@@ -57,6 +57,9 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
     },
+    fontFamily: {
+      pacifico: 'var(--font-pacifico)',
+    },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require('tailwindcss-animate')],

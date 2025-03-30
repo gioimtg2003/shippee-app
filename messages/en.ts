@@ -1,5 +1,5 @@
-import Common from './en/common.en.json';
+import common from './en/common.en.json';
 
 export const en = {
-  Common,
+  common,
 };

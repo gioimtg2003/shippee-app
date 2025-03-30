@@ -1,3 +1,5 @@
 {
-  "SignIn": "Sign in"
+  "SignIn": "Sign in",
+  "installPrompt": "Install this app on your device",
+  "download": "Download"
 }

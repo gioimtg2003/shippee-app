@@ -7,15 +7,38 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: 'shippee',
     description:
       'Shippee is a shipping company that delivers your packages on time.',
-    start_url: '/',
-    scope: '/',
-    theme_color: '#FFFFFF',
-    background_color: '#FFFFFF',
+    theme_color: '#6366f1',
+    background_color: '#4292f3',
     icons: [
       {
+        purpose: 'maskable',
         sizes: '512x512',
-        src: 'favicon.png',
+        src: 'icon512_maskable.png',
         type: 'image/png',
+      },
+      {
+        purpose: 'any',
+        sizes: '512x512',
+        src: 'icon512_rounded.png',
+        type: 'image/png',
+      },
+    ],
+    orientation: 'any',
+    dir: 'auto',
+    lang: 'vi',
+    start_url: '/',
+    scope: '/',
+    screenshots: [
+      {
+        src: 'screenshot1.png',
+        sizes: '991x685',
+        type: 'image/png',
+      },
+      {
+        src: 'screenshot1.png',
+        sizes: '991x685',
+        type: 'image/png',
+        form_factor: 'wide',
       },
     ],
   };
