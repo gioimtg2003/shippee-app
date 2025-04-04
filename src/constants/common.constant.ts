@@ -5,3 +5,5 @@ export const SCREEN_SIZE = {
   TABLET: 1024,
   DESKTOP: 1440,
 };
+
+export const ICON_SIZE_BOTTOM_NAVIGATION = 24;

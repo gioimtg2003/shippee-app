@@ -5,5 +5,9 @@
   "PLACE_ORDER": "Đặt hàng",
   "ORDER_HISTORY": "Lịch sử đặt hàng",
   "DRIVERS": "Tài xế",
-  "setting": "Cài đặt"
+  "setting": "Cài đặt",
+  "pickupLocation": "Địa điểm lấy hàng",
+  "from": "Từ",
+  "to": "Đến",
+  "availableTransport": "Phương tiện có sẵn"
 }

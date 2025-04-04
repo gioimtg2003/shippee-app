@@ -12,14 +12,14 @@ import { memo } from 'react';
 function HeaderNavigation() {
   const t = useTranslations('common');
   const pathName = usePathname();
-  console.log('pathName', pathName);
+
   return (
-    <div className='header-navbar sticky top-0 z-[999] flex w-full items-center overflow-hidden bg-transparent px-4 transition-all'>
+    <div className='header-navbar sticky top-0 z-[999] hidden w-full items-center overflow-hidden bg-transparent px-4 transition-all md:flex'>
       <div className='flex cursor-pointer items-center justify-center'>
         <Logo variant='text' />
       </div>
       <div className='h-full w-full px-4'>
-        <div className='flex h-full items-center justify-between'>
+        <div className='flex h-full items-center justify-center gap-x-10 md:justify-between md:gap-x-0'>
           <div className='flex h-full items-center justify-center gap-6'>
             {Object.entries(RoutesMap.APP).map(([key, value]) => (
               <div

@@ -5,5 +5,9 @@
   "PLACE_ORDER": "Place Order",
   "ORDER_HISTORY": "Order History",
   "DRIVERS": "Drivers",
-  "setting": "Setting"
+  "setting": "Setting",
+  "pickupLocation": "Pickup Location",
+  "from": "From",
+  "to": "To",
+  "availableTransport": "Available transport"
 }
