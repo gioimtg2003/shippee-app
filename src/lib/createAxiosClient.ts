@@ -2,7 +2,8 @@ import { ERRORS, RoutesMap } from '@/constants';
 import axios, { CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios';
 import dayjs from 'dayjs';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
-import Router from 'next/router';
+import { redirect } from 'next/navigation';
+
 import toast from 'react-hot-toast';
 
 let failedQueue: any[] = [];
@@ -73,7 +74,7 @@ export function createAxiosClient({
         throw new Error(response?.data?.message);
       }
 
-      return response;
+      return response?.data;
     },
     (error) => {
       const status = error?.response?.status;
@@ -101,7 +102,7 @@ export function createAxiosClient({
             )
           );
         }
-        return Router.replace(RoutesMap.AUTH.SIGN_IN);
+        return redirect(RoutesMap.AUTH.SIGN_IN);
       }
 
       const originalRequest = error.config;
@@ -175,7 +176,7 @@ export function createAxiosClient({
         error.response?.data?.message === ERRORS.RefreshTokenNotMatching
       ) {
         handleError?.(error);
-        return Router.replace(RoutesMap.AUTH.SIGN_IN);
+        return redirect(RoutesMap.AUTH.SIGN_IN);
       }
 
       // Any status codes that falls outside the range of 2xx cause this function to trigger

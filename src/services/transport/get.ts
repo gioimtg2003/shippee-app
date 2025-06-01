@@ -1,4 +1,8 @@
-import { IResponseData, UseGetOptions } from '@/interfaces';
+import {
+  IResponseData,
+  ISpecialRequireItem,
+  UseGetOptions,
+} from '@/interfaces';
 import { axiosInstant } from '@/lib/axiosClient';
 import { useQuery } from '@tanstack/react-query';
 import endpointRoot from './endpointRoot';
@@ -16,6 +20,7 @@ export interface ITransportTypeResponse {
   name: string;
   textSize: string;
   textWeight: string;
+  specialRequireItems: ISpecialRequireItem[];
 }
 
 const url = `${endpointRoot}`;
@@ -29,7 +34,7 @@ export const getTransportType = (params: ITransportTypeRequest) => {
   } = params;
   return axiosInstant.get<
     ITransportTypeRequest,
-    IResponseData<ITransportTypeResponse>
+    IResponseData<ITransportTypeResponse[]>
   >(url, {
     params: { ...rest },
     headers: {
@@ -40,7 +45,7 @@ export const getTransportType = (params: ITransportTypeRequest) => {
 };
 
 export const useGetTransportType = (
-  options: UseGetOptions<ITransportTypeResponse, ITransportTypeRequest>
+  options: UseGetOptions<ITransportTypeResponse[], ITransportTypeRequest>
 ) =>
   useQuery({
     ...options,

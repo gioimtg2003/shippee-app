@@ -1,7 +1,7 @@
 import { getConfig } from '@/config/getConfig';
 import { RoutesMap } from '@/constants';
 import useAuthStore from '@/stores/authStore';
-import Router from 'next/router';
+import { redirect } from 'next/navigation';
 import { createAxiosClient } from './createAxiosClient';
 
 const { apiUrl: BASE_URL } = getConfig();
@@ -20,7 +20,7 @@ function setRefreshedTokens(tokens: { token: string; refreshToken: string }) {
 async function logout() {
   useAuthStore.getState().setLogoutSuccess();
 
-  Router.replace(RoutesMap.AUTH.SIGN_IN);
+  redirect(RoutesMap.AUTH.SIGN_IN);
 }
 
 export const axiosInstant = createAxiosClient({

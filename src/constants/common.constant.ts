@@ -7,3 +7,7 @@ export const SCREEN_SIZE = {
 };
 
 export const ICON_SIZE_BOTTOM_NAVIGATION = 24;
+export enum PRICE_TYPE_ENUM {
+  FIXED = 'FIXED',
+  PERCENT = 'PERCENT',
+}
