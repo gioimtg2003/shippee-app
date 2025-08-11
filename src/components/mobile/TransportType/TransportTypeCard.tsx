@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { ITransportTypeResponse } from '@/services/transport/get';
 import { getKeyComponent } from '@/utils';
 import Image from 'next/image';
+import { useState } from 'react';
 import { GoPackage } from 'react-icons/go';
 import SpecialRequireItem from './SpecialRequireItem';
 
@@ -23,6 +24,11 @@ export default function TransportTypeCard(
     isSelected,
     specialRequireItems,
   } = props;
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
+
+  const handleSelectSpecial = (id: number) => {
+    setSelectedItem((prev) => (prev === id ? null : id));
+  };
   const handleClick = () => {
     handleSelect(id);
   };
@@ -63,6 +69,8 @@ export default function TransportTypeCard(
             ?.flatMap((item) => [item, ...(item?.children || [])])
             ?.map((item) => (
               <SpecialRequireItem
+                isSelected={selectedItem === item.id}
+                handleSelectSpecial={handleSelectSpecial}
                 key={getKeyComponent('special', item.id)}
                 {...item}
               />

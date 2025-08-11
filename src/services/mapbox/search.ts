@@ -48,6 +48,7 @@ export interface SearchMapBoxResponse {
 }
 
 export const URL_API_SEARCH_MAPBOX = `${endpointRoot}/search/searchbox/v1/suggest`;
+export const URL_API_RETRIEVE_MAPBOX = `${endpointRoot}/search/searchbox/v1/retrieve`;
 export const getKeySearchMapBox = (params: SearchMapBoxRequest) => [
   URL_API_SEARCH_MAPBOX,
   {

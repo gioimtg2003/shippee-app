@@ -3,11 +3,11 @@ import { TValidationTranslation } from '.';
 
 export const LoginSchema = (t: TValidationTranslation) =>
   z.object({
-    username: z
+    email: z
       .string({
-        required_error: 'Username is required',
+        required_error: 'Email is required',
       })
-      .min(4, t('Username must be at least 4 characters')),
+      .min(4, t('Email must be at least 4 characters')),
     password: z
       .string({
         required_error: 'Password is required',
