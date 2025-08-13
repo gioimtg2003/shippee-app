@@ -1,14 +1,14 @@
 import { STORAGE_STORE } from '@/constants';
 import { IUser } from '@/interfaces';
 import { create } from 'zustand';
-import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface AuthState {
-  token?: string;
+  accessToken?: string;
   refreshToken?: string | null;
   user?: IUser;
   setLoginSuccess: (tokens: {
-    token: string;
+    accessToken: string;
     refreshToken: string | null;
   }) => void;
   setLogoutSuccess: () => void;
@@ -17,28 +17,30 @@ interface AuthState {
 }
 
 const useAuthStore = create<AuthState>()(
-  devtools(
-    persist(
-      (set) => ({
-        setLoginSuccess: (tokens) => {
-          set({ token: tokens.token, refreshToken: tokens.refreshToken });
-        },
-        setToken: (token) => {
-          set({ token });
-        },
-        setUser: (user) => {
-          set({ user });
-        },
-        setLogoutSuccess: () => {
-          set({ token: undefined, refreshToken: null, user: undefined });
-        },
-      }),
-      {
-        name: STORAGE_STORE.AUTH_STORE,
-        partialize: (data) => ({ ...data }),
-        storage: createJSONStorage(() => localStorage),
-      }
-    )
+  persist(
+    (set) => ({
+      setLoginSuccess: (tokens) => {
+        console.log(tokens);
+        set({
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        });
+      },
+      setToken: (token) => {
+        set({ accessToken: token });
+      },
+      setUser: (user) => {
+        set({ user });
+      },
+      setLogoutSuccess: () => {
+        set({ accessToken: undefined, refreshToken: null, user: undefined });
+      },
+    }),
+    {
+      name: STORAGE_STORE.AUTH_STORE,
+      partialize: (data) => ({ ...data }),
+      storage: createJSONStorage(() => localStorage),
+    }
   )
 );
 

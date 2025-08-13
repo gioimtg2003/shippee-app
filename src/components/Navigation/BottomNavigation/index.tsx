@@ -1,5 +1,5 @@
 import { ICON_SIZE_BOTTOM_NAVIGATION, RoutesMap } from '@/constants';
-import { usePathname } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import { memo } from 'react';
 import { FiUsers } from 'react-icons/fi';
@@ -51,7 +51,7 @@ function BottomNavigation() {
             </div>
           ) : (
             <div className='flex h-full items-center justify-center'>
-              {icon}
+              <Link href={route}>{icon}</Link>
             </div>
           )}
         </div>

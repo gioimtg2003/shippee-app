@@ -9,7 +9,7 @@ interface IEnvironmentConfig {
 const EnvironmentConfig: IEnvironmentConfig = {
   local: {
     appUrl: 'http://localhost:3001',
-    apiUrl: ' http://192.168.1.149:5001/api',
+    apiUrl: ' http://localhost:5000/api',
     WsUrl: 'ws://localhost:4000',
   },
 

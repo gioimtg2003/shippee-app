@@ -4,6 +4,7 @@ import { Input } from '@/components/input';
 import PlaceOrderForm from '@/components/mobile/PlaceOrder';
 import ListTransportType from '@/components/mobile/TransportType';
 import { Button } from '@/components/ui/button';
+import { DrawerContent, Drawer as DrawerShadcn } from '@/components/ui/drawer';
 import {
   Select,
   SelectContent,
@@ -12,6 +13,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useDisclosure } from '@/hooks';
+import { axiosInstant } from '@/lib/axiosClient';
 import { cn } from '@/lib/utils';
 import { OrderSchema, TOrderFormSchema } from '@/zod/order.zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,8 +30,10 @@ import {
   Wallet,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { formatPrice } from './order-history/page';
+
 function Section({
   title,
   icon,
@@ -60,23 +65,106 @@ export default function MainPage() {
     resolver: zodResolver(OrderSchema(t)),
     mode: 'onSubmit',
   });
+  const [loadingCreate, setLoadingCreate] = useState(false);
   const [isOpenMap, setIsOpenMap] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const checkoutClosure = useDisclosure();
+
   const from = methods.watch('pickup');
   const to = methods.watch('destination');
   const isCheckout =
     !!from &&
     !!to &&
-    !!methods.watch('transportTypeId') &&
+    !!methods.watch('idTransportType') &&
     !!methods.watch('cusName') &&
     !!methods.watch('recipientName') &&
     !isOpenMap;
   const setOpenMap = (open: boolean) => {
     setIsOpenMap(open);
   };
+
+  const submit = async (data: TOrderFormSchema) => {
+    const pickCoordinates = data.pickup.coordinates;
+    const destCoordinates = data.destination.coordinates;
+    const handleData = {
+      ...data,
+      pickup: {
+        ...data.pickup,
+        lng: pickCoordinates[0],
+        lat: pickCoordinates[1],
+      },
+      destination: {
+        ...data.destination,
+        lng: destCoordinates[0],
+        lat: destCoordinates[1],
+      },
+    };
+    setLoadingCreate(true);
+    try {
+      await axiosInstant.post('/customer-order', handleData);
+      methods.reset();
+      checkoutClosure.close();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingCreate(false);
+    }
+  };
+  useEffect(() => {
+    (async () => {
+      if (isCheckout) {
+        try {
+          const pickCoordinates = methods.getValues().pickup.coordinates;
+          const destCoordinates = methods.getValues().destination.coordinates;
+          const handleData = {
+            ...methods.getValues(),
+            pickup: {
+              ...methods.getValues().pickup,
+              lng: pickCoordinates[0],
+              lat: pickCoordinates[1],
+            },
+            destination: {
+              ...methods.getValues().destination,
+              lng: destCoordinates[0],
+              lat: destCoordinates[1],
+            },
+          };
+          const calculate = await axiosInstant.post('/customer-order/pricing', {
+            ...handleData,
+          });
+          setTotalPrice(Math.floor(calculate.data.totalPrice));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    })();
+  }, [isCheckout]);
   return (
-    <main className='pb-[70px] pt-6 md:pb-0'>
+    <>
+      <DrawerShadcn open={isCheckout && !checkoutClosure.isOpen}>
+        <DrawerContent className='z-[9999]'>
+          <div className='flex items-center justify-between px-4 py-3 pt-3'>
+            <div className='flex flex-col'>
+              <span className='text-sm text-gray-600'>Tổng cộng</span>
+              <div className='flex items-center gap-1'>
+                <span className='text-[20px] font-semibold text-gray-800'>
+                  {formatPrice(totalPrice)}
+                </span>
+              </div>
+            </div>
+            <div className='flex items-center gap-3'>
+              <Button
+                className='h-11 rounded-xl bg-primary px-6 text-white hover:bg-primary'
+                onClick={checkoutClosure.open}
+              >
+                Tiếp tục
+              </Button>
+            </div>
+          </div>
+        </DrawerContent>
+      </DrawerShadcn>
       <Drawer
-        open={isCheckout}
+        open={checkoutClosure.isOpen}
         destroyOnClose
         width={'100%'}
         mask={false}
@@ -194,7 +282,7 @@ export default function MainPage() {
 
           <div
             className={cn(
-              'fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-md border-t bg-white',
+              'fixed inset-x-0 bottom-0 z-50 mx-auto w-full border-t bg-white',
               'pb-[calc(env(safe-area-inset-bottom)+12px)]'
             )}
           >
@@ -203,19 +291,24 @@ export default function MainPage() {
                 <span className='text-sm text-gray-600'>Tổng cộng</span>
                 <div className='flex items-center gap-1'>
                   <span className='text-[20px] font-semibold text-gray-800'>
-                    92,003đ
+                    {formatPrice(totalPrice)}
                   </span>
                 </div>
               </div>
               <div className='flex items-center gap-3'>
                 <Button
+                  onClick={checkoutClosure.close}
                   variant='outline'
                   className='h-11 rounded-xl border-gray-300 bg-white px-5 text-gray-800 hover:bg-gray-50'
                 >
                   Quay lại
                 </Button>
-                <Button className='h-11 rounded-xl bg-primary px-6 text-white hover:bg-primary'>
-                  Tiếp tục
+                <Button
+                  className='h-11 rounded-xl bg-primary px-6 text-white hover:bg-primary'
+                  onClick={methods.handleSubmit(submit)}
+                  loading={loadingCreate}
+                >
+                  Tạo đơn
                 </Button>
               </div>
             </div>
@@ -237,6 +330,6 @@ export default function MainPage() {
           <ListTransportType setValue={methods.setValue} />
         </form>
       </section>
-    </main>
+    </>
   );
 }

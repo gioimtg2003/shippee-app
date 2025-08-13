@@ -2,7 +2,6 @@ import { ERRORS, RoutesMap } from '@/constants';
 import axios, { CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios';
 import dayjs from 'dayjs';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
-import { redirect } from 'next/navigation';
 
 import toast from 'react-hot-toast';
 
@@ -36,7 +35,10 @@ export function createAxiosClient({
   getCurrentAccessToken: () => string;
   getCurrentRefreshToken: () => string;
   logout: () => void;
-  setRefreshedTokens: (tokens: { token: string; refreshToken: string }) => void;
+  setRefreshedTokens: (tokens: {
+    accessToken: string;
+    refreshToken: string;
+  }) => void;
 }) {
   const client = axios.create(options);
   const refreshTokenUrl = options.baseURL + '/auth/refresh-token';
@@ -102,7 +104,7 @@ export function createAxiosClient({
             )
           );
         }
-        return redirect(RoutesMap.AUTH.SIGN_IN);
+        return window.location.replace(RoutesMap.AUTH.SIGN_IN);
       }
 
       const originalRequest = error.config;
@@ -154,7 +156,7 @@ export function createAxiosClient({
               refreshToken: string;
             };
             const tokens = {
-              token: accessToken,
+              accessToken: accessToken,
               refreshToken: refreshToken,
             };
             setRefreshedTokens(tokens);
@@ -165,6 +167,8 @@ export function createAxiosClient({
           .finally(() => {
             isRefreshing = false;
           });
+      } else {
+        logout();
       }
 
       // Refresh token missing or expired => logout user...
@@ -176,7 +180,7 @@ export function createAxiosClient({
         error.response?.data?.message === ERRORS.RefreshTokenNotMatching
       ) {
         handleError?.(error);
-        return redirect(RoutesMap.AUTH.SIGN_IN);
+        return window.location.replace(RoutesMap.AUTH.SIGN_IN);
       }
 
       // Any status codes that falls outside the range of 2xx cause this function to trigger

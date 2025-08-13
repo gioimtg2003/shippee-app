@@ -33,10 +33,13 @@ export const OrderSchema = (t: TValidationTranslation) =>
         .array(z.number())
         .length(2, t('Invalid destination coordinates')),
     }),
-    transportTypeId: z.number({
+    idTransportType: z.number({
       required_error: 'Transport type is required',
     }),
-    note: z.string().max(500, t('Note must be at most 500 characters')),
+    note: z
+      .string()
+      .max(500, t('Note must be at most 500 characters'))
+      .optional(),
   });
 
 export type TOrderFormSchema = z.infer<ReturnType<typeof OrderSchema>>;

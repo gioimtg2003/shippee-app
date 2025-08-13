@@ -21,7 +21,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
-import { Map, MapRef } from 'react-map-gl/mapbox';
+import { Map, MapRef, Marker } from 'react-map-gl/mapbox';
 import { v4 as uuid } from 'uuid';
 import { useSearchAddress } from './hooks';
 
@@ -42,6 +42,7 @@ export default function PickAddressDrawer(props: {
   const { onSearch, searchValue, loading, data } = useSearchAddress();
   const [value, setValue] = useState<string>();
   const infoAddressClosure = useDisclosure();
+  const [markerPosition, setMarkerPosition] = useState<[number, number]>();
 
   useEffect(() => {
     (async () => {
@@ -142,7 +143,6 @@ export default function PickAddressDrawer(props: {
         </div>
         <Select
           showSearch
-          // notFoundContent='Không tìm thấy địa chỉ'
           filterOption={false}
           options={options}
           onSearch={onSearch}
@@ -172,14 +172,17 @@ export default function PickAddressDrawer(props: {
               const res = await axios.get(
                 `${URL_API_RETRIEVE_MAPBOX}/${value}?session_token=${uuid()}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`
               );
+              const coordinates =
+                res?.data?.features?.[0]?.geometry?.coordinates;
               mapRef?.current?.flyTo({
-                center: res?.data?.features?.[0]?.geometry?.coordinates,
+                center: coordinates,
                 zoom: 14,
               });
+              setMarkerPosition(coordinates);
               infoAddressClosure?.open();
               setValueForm(name, {
                 address: namePlace?.name ?? '',
-                coordinates: res?.data?.features?.[0]?.geometry?.coordinates,
+                coordinates,
               });
             } catch (error) {
               console.error('Error retrieving address:', error);
@@ -203,7 +206,11 @@ export default function PickAddressDrawer(props: {
         ref={mapRef}
         style={{ width: '100%', height: '100%' }}
         mapStyle={'mapbox://styles/gioimtg2003/cly3bplv3007k01qp87hradf3'}
-      />
+      >
+        {markerPosition && (
+          <Marker longitude={markerPosition[0]} latitude={markerPosition[1]} />
+        )}
+      </Map>
     </Drawer>
   );
 }

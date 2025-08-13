@@ -19,7 +19,7 @@ export default function ListTransportType({
 
   const handleSelect = (id: number) => {
     setSelectedItem((prev) => (prev === id ? null : id));
-    setValue('transportTypeId', id);
+    setValue('idTransportType', id);
   };
 
   return (

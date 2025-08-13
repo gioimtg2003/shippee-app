@@ -16,12 +16,12 @@ import { useForm } from 'react-hook-form';
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const token = useAuthStore((s) => s.token);
+  const token = useAuthStore((s) => s.accessToken);
   const t = useTranslations('common');
 
   // If already logged in, go home
   if (typeof window !== 'undefined' && token) {
-    router.replace('/');
+    router.replace('/app');
   }
 
   const methods = useForm<TLoginFormSchema>({
@@ -40,7 +40,7 @@ export default function LoginPage() {
       if (res?.data) {
         router.replace('/login');
       }
-      //   router.replace('/app');
+      router.replace('/app');
     } catch (err: any) {
       console.log(err);
     } finally {

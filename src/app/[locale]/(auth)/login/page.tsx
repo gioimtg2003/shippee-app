@@ -4,7 +4,6 @@ import { InputForm } from '@/components/form/InputForm';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { useRouter } from '@/i18n/routing';
-import { IResponseData } from '@/interfaces';
 import { axiosInstant } from '@/lib/axiosClient';
 import { cn } from '@/lib/utils';
 import useAuthStore from '@/stores/authStore';
@@ -20,12 +19,12 @@ export default function LoginPage() {
   const setAuth = useAuthStore((s) => s.setLoginSuccess);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const token = useAuthStore((s) => s.token);
+  const token = useAuthStore((s) => s.accessToken);
   const t = useTranslations('common');
 
   // If already logged in, go home
   if (typeof window !== 'undefined' && token) {
-    router.replace('/');
+    router.replace('/app');
   }
 
   const methods = useForm<TLoginFormSchema>({
@@ -37,15 +36,13 @@ export default function LoginPage() {
     if (!canLogin) return;
     setLoading(true);
     try {
-      const res = await axiosInstant.post<IResponseData<any>>(
-        'customer-auth/login',
-        {
-          ...dataLogin,
-        }
-      );
-      if (res?.data?.code === 200) {
+      const res = await axiosInstant.post<any>('customer-auth/login', {
+        ...dataLogin,
+      });
+      console.log('res?.data', res?.data);
+      if (res?.data?.accessToken) {
         setAuth({
-          ...res?.data?.data,
+          ...res?.data,
         });
       }
       router.replace('/app');
